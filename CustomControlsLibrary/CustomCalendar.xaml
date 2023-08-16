@@ -1,0 +1,368 @@
+﻿<UserControl x:Class="CustomControlsLibrary.CustomCalendar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CustomControlsLibrary"
+             xmlns:conv="clr-namespace:CustomControlsLibrary.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="270" d:DesignWidth="270" 
+             MinWidth="270" 
+             MinHeight="270"             
+             SizeChanged="UserControl_SizeChanged" >
+    <UserControl.Resources>
+
+        <!--#region Default Styles-->
+
+        <Duration x:Key="AnimDuration">0:0:0:0.2
+        </Duration>
+
+        <SolidColorBrush x:Key="MainGridColor">#FFE28888
+        </SolidColorBrush>
+
+        <Style x:Key="HighlightedYearButtonStyle" TargetType="Button">
+            <Style.Setters>
+                <Setter Property="Background" Value="Yellow"/>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="HighLightedMonthButtonStyle" TargetType="Button">
+            <Style.Setters>
+                <Setter Property="Background" Value="Green"/>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="BackgroundDateTextBlock" TargetType="Rectangle">
+            <Style.Setters>
+                <Setter Property="Fill" Value="#FF596ED6"/>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="MonthButtonStyle" TargetType="Button">
+            <Style.Setters>
+                <Setter Property="ItemsControl.Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border BorderThickness="0">
+                                <Border x:Name="brd"
+                                        Margin="1" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+                                    <Label Content="{TemplateBinding Content}"/>
+                                </Border>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Trigger.Setters>
+                                        <Setter TargetName="brd" Property="ItemsControl.Background" Value="Orange"/>
+                                        <Setter TargetName="brd" Property="ItemsControl.Margin" Value="0"/>
+                                    </Trigger.Setters>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="YearButtonStyle">
+            <Style.Setters>
+                <Setter Property="ItemsControl.Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border BorderThickness="0">
+                                <Border x:Name="brd"
+                                        Margin="1" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+                                    <Label Content="{TemplateBinding Content}"/>
+                                </Border>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Trigger.Setters>
+                                        <Setter TargetName="brd" Property="ItemsControl.Background" Value="Orange"/>
+                                        <Setter TargetName="brd" Property="ItemsControl.Margin" Value="0"/>
+                                    </Trigger.Setters>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="PrevButtonStyle" TargetType="Button">
+            <Style.Setters>
+                <Setter Property="ItemsControl.Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border BorderBrush="Black"                                    BorderThickness="2"
+                                    CornerRadius="4"
+                                    x:Name="brd">
+                                <Label Content="{TemplateBinding Content}"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"
+                                       FontSize="{TemplateBinding FontSize}"/>
+
+                                <Border.Background>
+                                    <SolidColorBrush x:Name="BrdColor">
+                                        <SolidColorBrush.Color>Transparent
+                                        </SolidColorBrush.Color>
+                                    </SolidColorBrush>
+                                </Border.Background>
+
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal">
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="BrdColor"
+                                                    Storyboard.TargetProperty="Color"
+                                                    To="Transparent"
+                                                    Duration="{StaticResource AnimDuration}"
+                                                    />
+                                            </Storyboard>
+                                        </VisualState>
+
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="BrdColor"
+                                                    Storyboard.TargetProperty="Color"
+                                                    To="LightBlue"
+                                                    Duration="{StaticResource AnimDuration}"
+                                                    />
+
+                                            </Storyboard>
+                                        </VisualState>
+
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="BrdColor"
+                                                    Storyboard.TargetProperty="Color"
+                                                    To="Orange"
+                                                    Duration="{StaticResource AnimDuration}"
+                                                    />
+
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Border>
+
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="NextButtonStyle" TargetType="Button">
+            <Style.Setters>
+                <Setter Property="ItemsControl.Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border BorderBrush="Black"  
+                                    BorderThickness="2"
+                                    CornerRadius="4"
+                                    x:Name="brd">
+                                <Label Content="{TemplateBinding Content}"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"
+                                       FontSize="{TemplateBinding FontSize}"/>
+
+                                <Border.Background>
+                                    <SolidColorBrush x:Name="BrdColor">
+                                        <SolidColorBrush.Color>Transparent
+                                        </SolidColorBrush.Color>
+                                    </SolidColorBrush>
+                                </Border.Background>
+
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal">
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="BrdColor"
+                                                    Storyboard.TargetProperty="Color"
+                                                    To="Transparent"
+                                                    Duration="{StaticResource AnimDuration}"
+                                                    />
+                                            </Storyboard>
+                                        </VisualState>
+
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="BrdColor"
+                                                    Storyboard.TargetProperty="Color"
+                                                    To="LightBlue"
+                                                    Duration="{StaticResource AnimDuration}"
+                                                    />
+
+                                            </Storyboard>
+                                        </VisualState>
+
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="BrdColor"
+                                                    Storyboard.TargetProperty="Color"
+                                                    To="Orange"
+                                                    Duration="{StaticResource AnimDuration}"
+                                                    />
+
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Border>
+
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="CalendarBorderStyle" TargetType="Border">
+            <Style.Setters>
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="BorderBrush" Value="Black"/>
+                <Setter Property="Margin" Value="4"/>
+                <Setter Property="BorderThickness" Value="2"/>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="DayButtonStyle" TargetType="Button">
+            <Style.Setters>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border BorderThickness="0">
+                                <Border x:Name="brd"
+                                        Margin="1" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+                                    <Label Content="{TemplateBinding Content}"/>
+                                </Border>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Trigger.Setters>
+                                        <Setter TargetName="brd" Property="ItemsControl.Background" Value="Orange"/>
+                                        <Setter TargetName="brd" Property="ItemsControl.Margin" Value="0"/>
+                                    </Trigger.Setters>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="CurrentDateHighLightedStyle" TargetType="Button">
+            <Style.Setters>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border BorderThickness="0">
+                                <Border Margin="1" BorderBrush="Black" 
+                                        BorderThickness="1" CornerRadius="5"
+                                        Background="Blue">
+                                    <Label Content="{TemplateBinding Content}"/>
+                                </Border>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="HighLightedDateStyle" TargetType="Button">
+            <Style.Setters>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border BorderThickness="0">
+                                <Border Margin="1" BorderBrush="Black" 
+                                        BorderThickness="1" CornerRadius="5"
+                                        Background="Green">
+                                    <Label Content="{TemplateBinding Content}"/>
+                                </Border>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="DayNameStyle" TargetType="TextBlock">
+        </Style>
+
+
+
+        <!--#endregion-->
+
+        <conv:StringToDateTime x:Key="DateToString"/>
+
+        <conv:StringToDateTieMultiConverter x:Key="DateToStringMulti"/>
+
+        <Duration x:Key="AnimDur">0:0:0:0.2
+        </Duration>
+
+        <Style x:Key="Days" TargetType="StackPanel">
+            <Style.Setters>
+                <Setter Property="Margin" Value="12,1,12,0"/>
+                <Setter Property="ItemsControl.FontSize" Value="20"/>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="MainBorderStyle" TargetType="Border">
+            <Style.Setters>
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="CornerRadius" Value="5"/>
+            </Style.Setters>
+        </Style>
+
+    </UserControl.Resources>
+    <Border x:Name="MainBorder" Style="{StaticResource MainBorderStyle}">
+        <Grid x:Name="MainGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="ButtonsGrid" Margin="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="35"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="35"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle Grid.Column="1" x:Name="txtBack" Style="{StaticResource BackgroundDateTextBlock}"/>
+                <Button Content="Prev" Style="{StaticResource PrevButtonStyle}" 
+                    x:Name="PrevButton" Click="PrevButton_Click"
+                    FontSize="10"/>
+                <Button Content="Next" Style="{StaticResource NextButtonStyle}"
+                    Grid.Column="2" x:Name="NextButton" Click="NextButton_Click"
+                    FontSize="10"/>
+                <TextBlock Margin="20,2" Grid.Column="1" Cursor="Hand"
+                       x:Name="MonthYear"
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Center" MouseDown="TextBlock_MouseDown"                       
+                        >
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource DateToStringMulti}">
+                            <Binding Path="CurrentDate" UpdateSourceTrigger="PropertyChanged"/>
+                            <Binding Path="StringFormatType" UpdateSourceTrigger="PropertyChanged"/>
+                            <Binding Path="LowerDateLimit" UpdateSourceTrigger="PropertyChanged"/>
+                            <Binding Path="UpperDateLimit" UpdateSourceTrigger="PropertyChanged"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" 
+                      x:Name="DaysOfWeek" Style="{StaticResource Days}">
+            </StackPanel>
+            <Border x:Name="brd" Grid.Row="2" 
+                Style="{StaticResource CalendarBorderStyle}">
+                <WrapPanel Margin="4"  x:Name="PanelMain"/>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

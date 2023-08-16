@@ -1,0 +1,204 @@
+﻿<UserControl x:Class="CustomControlsLibrary.CustomDatePicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CustomControlsLibrary"
+             xmlns:conv="clr-namespace:CustomControlsLibrary.WPFConverters"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="400"
+             MinHeight="40"
+             MinWidth="250">
+    <UserControl.Resources>
+
+
+        <!--#region Fields -->
+
+        <Duration x:Key="AnimDuration">0:0:0:0.5
+        </Duration>
+
+        <!--#endregion-->
+
+        <!--#region Styles -->
+
+
+
+        <Style x:Key="MainBorderStyle" TargetType="Border">
+            <Style.Setters>
+                <Setter Property="BorderBrush" Value="Blue"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="CornerRadius" Value="5"/>
+                <Setter Property="Padding" Value="2"/>
+                <Setter Property="Background" Value="White"/>
+            </Style.Setters>
+
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation
+                                    Storyboard.TargetProperty="BorderBrush.Color"
+                                    To="Orange"
+                                    Duration="{StaticResource AnimDuration}"
+                                    />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation
+                                    Storyboard.TargetProperty="BorderBrush.Color"
+                                    To="Blue"
+                                    Duration="{StaticResource AnimDuration}"
+                                    />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+
+            </Style.Triggers>
+
+        </Style>
+
+        <Style x:Key="ToggleButtonStyle" TargetType="ToggleButton">
+            <Style.Setters>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                            <Border x:Name="brd" CornerRadius="5" Background="Transparent">
+                                <Border.BorderThickness>
+                                    <Thickness Left="2" 
+                                               Top="2" 
+                                               Right="2" 
+                                               Bottom="2"/>
+                                </Border.BorderThickness>
+
+                                <Border.BorderBrush>
+                                    <SolidColorBrush>
+                                        <SolidColorBrush.Color>
+                                            <Color>black
+                                            </Color>
+                                        </SolidColorBrush.Color>
+                                    </SolidColorBrush>
+                                </Border.BorderBrush>
+                                <Viewbox Margin="2,0" 
+                                         RenderTransformOrigin="0.5 0.5">
+                                    <Path Data="M 0,5 L15,20 L30,5 L15,10 L0,5"
+                                          Fill="blue" Stroke="Black"
+                                          StrokeThickness="1" x:Name="path"/>
+
+                                    <Viewbox.RenderTransform>
+                                        <RotateTransform Angle="0" x:Name="rot"
+                                                         />
+
+                                    </Viewbox.RenderTransform>
+                                </Viewbox>
+                            </Border>
+
+                            <ControlTemplate.Triggers>
+                                <EventTrigger RoutedEvent="MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Duration="{StaticResource AnimDuration}"
+                                                Storyboard.TargetProperty="Fill.Color"
+                                                Storyboard.TargetName="path"
+                                                To="Orange"
+                                                />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Duration="{StaticResource AnimDuration}"
+                                                Storyboard.TargetProperty="Fill.Color"
+                                                Storyboard.TargetName="path"
+                                                To="Blue"
+                                                />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+
+                                <EventTrigger RoutedEvent="Checked">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Duration="0:0:0:0.01"
+                                                Storyboard.TargetName="rot"
+                                                Storyboard.TargetProperty="Angle"
+                                                To="180"
+                                                />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+
+                                <EventTrigger RoutedEvent="Unchecked">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Duration="0:0:0:0.01"
+                                                Storyboard.TargetName="rot"
+                                                Storyboard.TargetProperty="Angle"
+                                                To="0"
+                                                />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </ControlTemplate.Triggers>
+
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="DatePresenterStyle" TargetType="TextBlock">
+            <Style.Setters>
+                <Setter Property="FontSize" Value="14"/>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="PopupStyle" TargetType="Popup">
+            <Style.Setters>
+                <Setter Property="Placement" Value="Bottom"/>
+                <Setter Property="StaysOpen" Value="False"/>
+                <Setter Property="Width" Value="270"/>
+                <Setter Property="Height" Value="270"/>
+            </Style.Setters>
+        </Style>
+
+        <!--#endregion-->
+
+    </UserControl.Resources>
+
+    <Border x:Name="MainBorder" Style="{StaticResource MainBorderStyle}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="DatePresenter"
+                   Grid.Column="0"
+                  Style="{StaticResource DatePresenterStyle}"
+               />
+            <ToggleButton x:Name="ToglButton"
+                          Style="{StaticResource ToggleButtonStyle}"
+                          Grid.Column="2"
+                          Content="Press"/>
+            <Popup  IsOpen="{Binding ElementName=ToglButton, 
+                Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                    x:Name="Popup" Style="{StaticResource PopupStyle}">
+
+            </Popup>
+        </Grid>
+    </Border>
+</UserControl>
