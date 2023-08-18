@@ -23,6 +23,23 @@ namespace CustomControlsLibrary
     {
         #region Dep Properties
 
+        //try to bind dp via code behind
+
+
+
+        public DateTime ChoosenDate
+        {
+            get { return (DateTime)GetValue(ChoosenDateProperty); }
+            set { SetValue(ChoosenDateProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ChoosenDate.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ChoosenDateProperty =
+            DependencyProperty.Register("ChoosenDate", typeof(DateTime), 
+                typeof(CustomDatePicker), new PropertyMetadata(new DateTime()));
+
+
+
         public CustomCalendar Calendar
         {
             get { return (CustomCalendar)GetValue(CalendarProperty); }
@@ -190,6 +207,16 @@ namespace CustomControlsLibrary
             This.Popup.Child = (CustomCalendar)e.NewValue;
 
             Cust.OnDateSelected += This.Cust_OnDateSelected;
+
+            //Set binding instance for CustomCalendar with path: SelectedDate
+            Binding binding = new Binding("SelectedDate") 
+            { 
+                Source = Cust,  
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                Mode = BindingMode.TwoWay
+            };
+
+            This.SetBinding(ChoosenDateProperty, binding);            
         }
 
         private void Cust_OnDateSelected(object arg1, DateTime arg2)

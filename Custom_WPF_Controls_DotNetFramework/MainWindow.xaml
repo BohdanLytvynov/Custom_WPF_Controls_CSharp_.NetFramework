@@ -29,6 +29,6 @@
             </custControlls:CustomDatePicker.Calendar>
         </custControlls:CustomDatePicker>
         <Calendar Canvas.Left="501" Canvas.Top="153" SelectedDate="{Binding ElementName=DatePicker,
-            Path=Calendar.SelectedDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            Path=ChoosenDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
     </Canvas>
 </Window>
