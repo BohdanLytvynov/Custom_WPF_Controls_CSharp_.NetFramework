@@ -1,4 +1,5 @@
-﻿using CustomControlsLibrary.WPFConverters;
+﻿using CustomControlsLibrary.Converters;
+using CustomControlsLibrary.WPFConverters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,16 +28,14 @@ namespace CustomControlsLibrary
 
 
 
-        public DateTime ChoosenDate
+        public DateTime ChosenDate
         {
-            get { return (DateTime)GetValue(ChoosenDateProperty); }
-            set { SetValue(ChoosenDateProperty, value); }
+            get { return (DateTime)GetValue(ChosenDateProperty); }
+            set { SetValue(ChosenDateProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for ChoosenDate.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ChoosenDateProperty =
-            DependencyProperty.Register("ChoosenDate", typeof(DateTime), 
-                typeof(CustomDatePicker), new PropertyMetadata(new DateTime()));
+        // Using a DependencyProperty as the backing store for ChosenDate.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ChosenDateProperty;
 
 
 
@@ -108,6 +107,10 @@ namespace CustomControlsLibrary
 
         static CustomDatePicker()
         {
+            ChosenDateProperty =
+            DependencyProperty.Register("ChosenDate", typeof(DateTime), 
+            typeof(CustomDatePicker), new PropertyMetadata(new DateTime(), OnChosenDatePropertyChanged));
+
             CalendarProperty =
              DependencyProperty.Register("Calendar", typeof(CustomCalendar),
                  typeof(CustomDatePicker), new PropertyMetadata(null, OnCalendarPropertyChanged));
@@ -136,6 +139,8 @@ namespace CustomControlsLibrary
 
             #endregion
         }
+
+        
 
 
         #endregion
@@ -205,9 +210,7 @@ namespace CustomControlsLibrary
             var This = (d as CustomDatePicker);
 
             This.Popup.Child = (CustomCalendar)e.NewValue;
-
-            Cust.OnDateSelected += This.Cust_OnDateSelected;
-
+                       
             //Set binding instance for CustomCalendar with path: SelectedDate
             Binding binding = new Binding("SelectedDate") 
             { 
@@ -216,19 +219,22 @@ namespace CustomControlsLibrary
                 Mode = BindingMode.TwoWay
             };
 
-            This.SetBinding(ChoosenDateProperty, binding);            
+            This.SetBinding(ChosenDateProperty, binding);                        
         }
 
-        private void Cust_OnDateSelected(object arg1, DateTime arg2)
+        private static void OnChosenDatePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (m_dateToStr == null)
-                m_dateToStr = new DateTimeToStringConverter();
+            var This = d as CustomDatePicker;
 
-            this.DatePresenter.Text = (string)m_dateToStr.Convert(arg2, null, null, null);
+            if (This.m_dateToStr == null)
+                This.m_dateToStr = new DateTimeToStringConverter();
 
-            this.ToglButton.IsChecked = false;
+            This.DatePresenter.Text = (string)This.m_dateToStr.Convert(e.NewValue, null, null, null);
+
+            This.ToglButton.IsChecked = false;
         }
 
+        
         #endregion
 
         #endregion

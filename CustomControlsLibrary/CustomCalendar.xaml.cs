@@ -22,11 +22,7 @@ namespace CustomControlsLibrary
     /// Логика взаимодействия для CustomCalendar.xaml
     /// </summary>
     public partial class CustomCalendar : UserControl, INotifyPropertyChanged
-    {
-        #region Events
-        public event Action<object, DateTime> OnDateSelected;
-        #endregion
-
+    {        
         #region DProperty
 
         #region Reference to this
@@ -1226,9 +1222,7 @@ namespace CustomControlsLibrary
         {
             var This = obj as CustomCalendar;
 
-            This.HighlightSelectedDate();
-
-            This.OnDateSelected?.Invoke(This, This.SelectedDate);
+            This.HighlightSelectedDate();           
         }
 
         #endregion
