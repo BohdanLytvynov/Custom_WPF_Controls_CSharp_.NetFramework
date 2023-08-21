@@ -20,8 +20,6 @@ namespace CustomControlsLibrary.WPFConverters
                 return temp.ToShortDateString();
 
             return DependencyProperty.UnsetValue;
-
-
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

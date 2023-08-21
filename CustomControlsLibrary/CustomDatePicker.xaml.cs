@@ -1,12 +1,19 @@
 ﻿using CustomControlsLibrary.Converters;
+using CustomControlsLibrary.Utilities;
 using CustomControlsLibrary.WPFConverters;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -20,7 +27,7 @@ namespace CustomControlsLibrary
     /// <summary>
     /// Логика взаимодействия для CustomDatePicker.xaml
     /// </summary>
-    public partial class CustomDatePicker : UserControl
+    public partial class CustomDatePicker : UserControl, INotifyPropertyChanged
     {
         #region Dep Properties
 
@@ -97,10 +104,16 @@ namespace CustomControlsLibrary
 
         #endregion
 
+        #region Events
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+       
         #region Fields
 
         DateTimeToStringConverter m_dateToStr;
-
+                            
         #endregion
 
         #region Static Ctor
@@ -150,8 +163,8 @@ namespace CustomControlsLibrary
         public CustomDatePicker()
         {
             InitializeComponent();
-
-            m_dateToStr = new DateTimeToStringConverter();
+            
+            m_dateToStr = new DateTimeToStringConverter();            
         }
 
         #endregion
@@ -209,19 +222,22 @@ namespace CustomControlsLibrary
 
             var This = (d as CustomDatePicker);
 
-            This.Popup.Child = (CustomCalendar)e.NewValue;
-                       
+            //Rebuild Main Grid            
+
+            This.Label.Content = Cust;
+           
             //Set binding instance for CustomCalendar with path: SelectedDate
-            Binding binding = new Binding("SelectedDate") 
-            { 
-                Source = Cust,  
+            Binding binding = new Binding("SelectedDate")
+            {
+                Source = Cust,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Mode = BindingMode.TwoWay
             };
 
-            This.SetBinding(ChosenDateProperty, binding);                        
+            This.SetBinding(ChosenDateProperty, binding);           
         }
 
+       
         private static void OnChosenDatePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var This = d as CustomDatePicker;
@@ -234,7 +250,12 @@ namespace CustomControlsLibrary
             This.ToglButton.IsChecked = false;
         }
 
-        
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            var temp = Volatile.Read(ref PropertyChanged);
+
+            temp?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
         #endregion
 
         #endregion

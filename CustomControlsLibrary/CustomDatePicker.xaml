@@ -179,26 +179,30 @@
 
     </UserControl.Resources>
 
-    <Border x:Name="MainBorder" Style="{StaticResource MainBorderStyle}">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="12"/>
-                <ColumnDefinition Width="50"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock x:Name="DatePresenter"
+
+    <Grid x:Name="Main">
+        <Border x:Name="MainBorder" Style="{StaticResource MainBorderStyle}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="DatePresenter"
                    Grid.Column="0"
                   Style="{StaticResource DatePresenterStyle}"
                />
-            <ToggleButton x:Name="ToglButton"
+                <ToggleButton x:Name="ToglButton"
                           Style="{StaticResource ToggleButtonStyle}"
                           Grid.Column="2"
                           Content="Press"/>
-            <Popup  IsOpen="{Binding ElementName=ToglButton, 
+                <Popup  IsOpen="{Binding ElementName=ToglButton, 
                 Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                     x:Name="Popup" Style="{StaticResource PopupStyle}">
-
-            </Popup>
-        </Grid>
-    </Border>
+                    <Label x:Name="Label"/>
+                </Popup>
+            </Grid>
+        </Border>
+    </Grid>
+    
 </UserControl>
