@@ -348,10 +348,10 @@
                         >
                     <TextBlock.Text>
                         <MultiBinding Converter="{StaticResource DateToStringMulti}">
-                            <Binding Path="CurrentDate" UpdateSourceTrigger="PropertyChanged"/>
-                            <Binding Path="StringFormatType" UpdateSourceTrigger="PropertyChanged"/>
-                            <Binding Path="LowerDateLimit" UpdateSourceTrigger="PropertyChanged"/>
-                            <Binding Path="UpperDateLimit" UpdateSourceTrigger="PropertyChanged"/>
+                            <Binding RelativeSource="{RelativeSource AncestorType=local:CustomCalendar}" Path="CurrentDate" UpdateSourceTrigger="PropertyChanged"/>
+                            <Binding RelativeSource="{RelativeSource AncestorType=local:CustomCalendar}" Path="StringFormatType" UpdateSourceTrigger="PropertyChanged"/>
+                            <Binding RelativeSource="{RelativeSource AncestorType=local:CustomCalendar}" Path="LowerDateLimit" UpdateSourceTrigger="PropertyChanged"/>
+                            <Binding RelativeSource="{RelativeSource AncestorType=local:CustomCalendar}" Path="UpperDateLimit" UpdateSourceTrigger="PropertyChanged"/>
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>

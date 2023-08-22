@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
@@ -27,11 +28,20 @@ namespace CustomControlsLibrary
     /// <summary>
     /// Логика взаимодействия для CustomDatePicker.xaml
     /// </summary>
-    public partial class CustomDatePicker : UserControl, INotifyPropertyChanged
+    public partial class CustomDatePicker : UserControl
     {
         #region Dep Properties
 
-        //try to bind dp via code behind
+
+
+        public CustomCalendar CustomCalendar
+        {
+            get { return (CustomCalendar)GetValue(CustomCalendarProperty); }
+            set { SetValue(CustomCalendarProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CustomCalendar.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CustomCalendarProperty;
 
 
 
@@ -43,17 +53,6 @@ namespace CustomControlsLibrary
 
         // Using a DependencyProperty as the backing store for ChosenDate.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ChosenDateProperty;
-
-
-
-        public CustomCalendar Calendar
-        {
-            get { return (CustomCalendar)GetValue(CalendarProperty); }
-            set { SetValue(CalendarProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for Calendar.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty CalendarProperty;
 
         #region Styles
 
@@ -109,24 +108,25 @@ namespace CustomControlsLibrary
         public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
-       
+
         #region Fields
 
         DateTimeToStringConverter m_dateToStr;
-                            
+
         #endregion
 
         #region Static Ctor
 
         static CustomDatePicker()
         {
-            ChosenDateProperty =
-            DependencyProperty.Register("ChosenDate", typeof(DateTime), 
-            typeof(CustomDatePicker), new PropertyMetadata(new DateTime(), OnChosenDatePropertyChanged));
+            CustomCalendarProperty =
+            DependencyProperty.Register("CustomCalendar", typeof(CustomCalendar),
+                typeof(CustomDatePicker), new PropertyMetadata(null, OnCustomCalendarPropertyChanged));
 
-            CalendarProperty =
-             DependencyProperty.Register("Calendar", typeof(CustomCalendar),
-                 typeof(CustomDatePicker), new PropertyMetadata(null, OnCalendarPropertyChanged));
+            ChosenDateProperty =
+            DependencyProperty.Register("ChosenDate", typeof(DateTime),
+                typeof(CustomDatePicker),
+                new PropertyMetadata(new DateTime(), OnChosenDatePropertyChanged));
 
             #region Styles
 
@@ -152,10 +152,7 @@ namespace CustomControlsLibrary
 
             #endregion
         }
-
         
-
-
         #endregion
 
         #region Ctor
@@ -163,8 +160,10 @@ namespace CustomControlsLibrary
         public CustomDatePicker()
         {
             InitializeComponent();
-            
-            m_dateToStr = new DateTimeToStringConverter();            
+
+            m_dateToStr = new DateTimeToStringConverter();
+
+
         }
 
         #endregion
@@ -172,6 +171,31 @@ namespace CustomControlsLibrary
         #region Methods
 
         #region On Properties Changed
+
+        private static void OnCustomCalendarPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var This = (CustomDatePicker)d;
+
+            var Calendar = (CustomCalendar)e.NewValue;
+
+            Calendar.OnDateSelected += This.Calendar_OnDateSelected;
+
+            This.Label.Content = Calendar;
+
+            Debug.WriteLine("InMethod");
+        }
+
+        private void Calendar_OnDateSelected(object arg1, DateTime arg2)
+        {
+            if (m_dateToStr == null)
+                m_dateToStr = new DateTimeToStringConverter();
+
+            this.DatePresenter.Text = (string)m_dateToStr.Convert(arg2, null, null, null);
+
+            this.ToglButton.IsChecked = false;
+
+            ChosenDate = arg2;
+        }
 
         #region Styles
 
@@ -216,46 +240,14 @@ namespace CustomControlsLibrary
 
         #endregion
 
-        private static void OnCalendarPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var Cust = (CustomCalendar)e.NewValue;
-
-            var This = (d as CustomDatePicker);
-
-            //Rebuild Main Grid            
-
-            This.Label.Content = Cust;
-           
-            //Set binding instance for CustomCalendar with path: SelectedDate
-            Binding binding = new Binding("SelectedDate")
-            {
-                Source = Cust,
-                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                Mode = BindingMode.TwoWay
-            };
-
-            This.SetBinding(ChosenDateProperty, binding);           
-        }
-
-       
         private static void OnChosenDatePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var This = d as CustomDatePicker;
 
-            if (This.m_dateToStr == null)
-                This.m_dateToStr = new DateTimeToStringConverter();
-
-            This.DatePresenter.Text = (string)This.m_dateToStr.Convert(e.NewValue, null, null, null);
-
-            This.ToglButton.IsChecked = false;
+            This.CustomCalendar.SelectedDate = (DateTime)e.NewValue;    
         }
 
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            var temp = Volatile.Read(ref PropertyChanged);
 
-            temp?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
         #endregion
 
         #endregion

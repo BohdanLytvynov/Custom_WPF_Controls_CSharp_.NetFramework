@@ -22,13 +22,14 @@ namespace CustomControlsLibrary
     /// Логика взаимодействия для CustomCalendar.xaml
     /// </summary>
     public partial class CustomCalendar : UserControl, INotifyPropertyChanged
-    {        
-        #region DProperty
+    {
+        #region Event
 
-        #region Reference to this
+        public event Action<object, DateTime> OnDateSelected;
 
         #endregion
 
+        #region DProperty
 
         #region Styles
 
@@ -198,8 +199,6 @@ namespace CustomControlsLibrary
         public static readonly DependencyProperty SelectedDateProperty;
 
         #region Calendar items modifiers
-
-
 
         public double DayButtonWidthModifier
         {
@@ -442,9 +441,7 @@ namespace CustomControlsLibrary
         public CustomCalendar()
         {
             InitializeComponent();
-
-            this.DataContext = this;
-
+            
             m_currentDate = DateTime.Now;
 
             m_strTodt = new StringToDateTime();
@@ -955,7 +952,7 @@ namespace CustomControlsLibrary
 
             selected.Style = (Style)this.Resources["HighLightedDateStyle"];
 
-            m_highlited = selected;
+            m_highlited = selected;            
         }
         #endregion
 
@@ -1222,7 +1219,9 @@ namespace CustomControlsLibrary
         {
             var This = obj as CustomCalendar;
 
-            This.HighlightSelectedDate();           
+            This.HighlightSelectedDate();
+
+            This.OnDateSelected?.Invoke(This, This.SelectedDate);
         }
 
         #endregion

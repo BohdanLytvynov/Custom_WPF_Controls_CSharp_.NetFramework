@@ -3,11 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        
-        xmlns:custControlls="clr-namespace:CustomControlsLibrary;assembly=CustomControlsLibrary"
+        xmlns:local="clr-namespace:Custom_WPF_Controls_DotNetFramework" xmlns:custControlls="clr-namespace:CustomControlsLibrary;assembly=CustomControlsLibrary"
+        xmlns:conv="clr-namespace:CustomControlsLibrary.WPFConverters;assembly=CustomControlsLibrary"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <local:MWViewModel/>
+    </Window.DataContext>
     <Window.Resources>
+
+        <conv:DateTimeToStringConverter x:Key="StrToDt"/>
+
+        <custControlls:CustomCalendar x:Key="CustCalendar">
+        </custControlls:CustomCalendar>
 
         <Style x:Key="MB" TargetType="Border">
             <Style.Setters>
@@ -20,15 +28,17 @@
     </Window.Resources>
     <Canvas>
         <custControlls:CustomDatePicker x:Name="DatePicker" Canvas.Left="20" Canvas.Top="20" Width="300"
-                                        >
-            <custControlls:CustomDatePicker.Calendar>
-                <custControlls:CustomCalendar 
-                                      MainBorderStyle="{StaticResource MB}"
-                                      
-                    />
-            </custControlls:CustomDatePicker.Calendar>
-        </custControlls:CustomDatePicker>
-        <Calendar Canvas.Left="501" Canvas.Top="153" SelectedDate="{Binding ElementName=DatePicker,
-            Path=ChosenDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                 CustomCalendar="{StaticResource CustCalendar}" 
+                                        ChosenDate="{Binding Date,UpdateSourceTrigger=PropertyChanged,
+            Mode=TwoWay}"
+                                       />
+        <!--<TextBlock Canvas.Left="500" Canvas.Top="50" Text="{Binding ElementName=DatePicker,
+            Path=CustomCalendar.SelectedDate,
+            UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource StrToDt}}"/>-->
+
+        <!--<Calendar Canvas.Left="500" Canvas.Top="200" SelectedDate="{Binding ElementName=DatePicker,
+            Path=ChosenDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>-->
+
+
     </Canvas>
 </Window>
