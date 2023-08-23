@@ -119,15 +119,15 @@ namespace CustomControlsLibrary
 
         static CustomDatePicker()
         {
+            ChosenDateProperty =
+           DependencyProperty.Register("ChosenDate", typeof(DateTime),
+               typeof(CustomDatePicker),
+               new PropertyMetadata(new DateTime(), OnChosenDatePropertyChanged));
+
             CustomCalendarProperty =
             DependencyProperty.Register("CustomCalendar", typeof(CustomCalendar),
                 typeof(CustomDatePicker), new PropertyMetadata(null, OnCustomCalendarPropertyChanged));
-
-            ChosenDateProperty =
-            DependencyProperty.Register("ChosenDate", typeof(DateTime),
-                typeof(CustomDatePicker),
-                new PropertyMetadata(new DateTime(), OnChosenDatePropertyChanged));
-
+           
             #region Styles
 
             MainBorderStyleProperty =
@@ -244,6 +244,7 @@ namespace CustomControlsLibrary
         {
             var This = d as CustomDatePicker;
 
+            //if(This.CustomCalendar!=null)
             This.CustomCalendar.SelectedDate = (DateTime)e.NewValue;    
         }
 
