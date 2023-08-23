@@ -198,6 +198,7 @@
                           Content="Press"/>
                 <Popup  IsOpen="{Binding ElementName=ToglButton, 
                 Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                        
                     x:Name="Popup" Style="{StaticResource PopupStyle}">
                     <Label x:Name="Label"/>
                 </Popup>
