@@ -115,16 +115,17 @@ namespace CustomControlsLibrary
         #region Static Ctor
 
         static CustomDatePicker()
-        {
+        {           
             CustomCalendarProperty =
             DependencyProperty.Register("CustomCalendar", typeof(CustomCalendar),
                 typeof(CustomDatePicker), new PropertyMetadata(null, OnCustomCalendarPropertyChanged));
+
 
             ChosenDateProperty =
             DependencyProperty.Register("ChosenDate", typeof(DateTime),
                 typeof(CustomDatePicker),
                 new PropertyMetadata(new DateTime()));
-
+           
             #region Styles
 
             MainBorderStyleProperty =
@@ -244,7 +245,7 @@ namespace CustomControlsLibrary
         }
 
         #endregion
-       
+
         #endregion
 
         #endregion
