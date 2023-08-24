@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Custom_WPF_Controls_DotNetFramework
 {
     public class MWViewModel : ViewModelBaseLib.ViewModelBase.ViewModelBase
