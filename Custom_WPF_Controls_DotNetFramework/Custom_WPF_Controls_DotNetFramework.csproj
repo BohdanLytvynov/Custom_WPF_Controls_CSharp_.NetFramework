@@ -51,7 +51,7 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="ViewModelBaseLib">
-      <HintPath>..\..\..\Work\Project_Manager\Project Manager\Project_Manager\ViewModelBaseLib\bin\Debug\ViewModelBaseLib.dll</HintPath>
+      <HintPath>..\..\..\Work\Project_Manager\ViewModelBaseLib\bin\Debug\ViewModelBaseLib.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />

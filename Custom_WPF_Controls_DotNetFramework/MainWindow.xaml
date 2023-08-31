@@ -25,6 +25,13 @@
             </Style.Setters>
         </Style>
 
+        <Style x:Key="BorderTest" TargetType="Border">
+            <Style.Setters>
+                <Setter Property="BorderBrush" Value="ForestGreen"/>
+                <Setter Property="BorderThickness" Value="3"/>
+            </Style.Setters>
+        </Style>
+
     </Window.Resources>
     <Canvas>
         <custControlls:CustomDatePicker x:Name="DatePicker" Canvas.Left="20" Canvas.Top="20" Width="300"
@@ -39,6 +46,8 @@
         <!--<Calendar Canvas.Left="500" Canvas.Top="200" SelectedDate="{Binding ElementName=DatePicker,
             Path=ChosenDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>-->
 
+        <custControlls:CustomPasswordBox Canvas.Top="200" Canvas.Left="400"
+                                         BorderStyle="{DynamicResource BorderTest}"/>
 
     </Canvas>
 </Window>
