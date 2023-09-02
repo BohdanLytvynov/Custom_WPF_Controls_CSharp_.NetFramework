@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -60,6 +61,7 @@
     <Compile Include="CustomPasswordBox.xaml.cs">
       <DependentUpon>CustomPasswordBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Extentions\SecureStringExtentions.cs" />
     <Compile Include="LogRegisterWindow.xaml.cs">
       <DependentUpon>LogRegisterWindow.xaml</DependentUpon>
     </Compile>

@@ -30,6 +30,17 @@
                 <Setter Property="BorderBrush" Value="ForestGreen"/>
                 <Setter Property="BorderThickness" Value="3"/>
             </Style.Setters>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.Setters>
+                        <Setter Property="BorderBrush" Value="Orange"/>
+                    </Trigger.Setters>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="Pass" TargetType="PasswordBox">
+            <Setter Property="FontSize" Value="20"/>
         </Style>
 
     </Window.Resources>
@@ -46,8 +57,13 @@
         <!--<Calendar Canvas.Left="500" Canvas.Top="200" SelectedDate="{Binding ElementName=DatePicker,
             Path=ChosenDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>-->
 
-        <custControlls:CustomPasswordBox Canvas.Top="200" Canvas.Left="400"
-                                         BorderStyle="{DynamicResource BorderTest}"/>
+        <custControlls:CustomPasswordBox Canvas.Top="200" Canvas.Left="400" Height="45"
+                                         Width="200"
+                                         ErrorTextBlockHeight="15"
+                                         PasswordBoxStyle="{DynamicResource Pass}"
+                                         BorderStyle="{DynamicResource BorderTest}"
+                                         CheckPasswordDelegate="{Binding CheckPass,
+            UpdateSourceTrigger=PropertyChanged}"/>
 
     </Canvas>
 </Window>
