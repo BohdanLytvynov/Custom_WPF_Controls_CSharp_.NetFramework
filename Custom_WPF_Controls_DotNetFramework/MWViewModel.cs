@@ -1,8 +1,11 @@
 ﻿using CustomControlsLibrary;
+using CustomControlsLibrary.Extentions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -41,6 +44,9 @@ namespace Custom_WPF_Controls_DotNetFramework
                 {
                     if (secStrig.Length != 0)
                     {
+                       
+                        //Place Here Some Check Code
+
                         return true;
                     }
                     else

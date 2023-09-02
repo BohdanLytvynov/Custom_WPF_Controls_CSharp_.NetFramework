@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -12,36 +13,38 @@ namespace CustomControlsLibrary.Extentions
     public unsafe static class SecureStringExtentions
     {
         #region Methods
-        public static byte[] GetBytes(this SecureString secString, Encoding encoding = null)
+        public static byte[] GetBytes(this SecureString secString, Encoding enc = null)
         { 
-            byte[] bytes = new byte[secString.Length];
-
+            int length = secString.Length;
+            
             IntPtr ptr = IntPtr.Zero;
+
+            byte[] workArray = null;
+
+            GCHandle? handle = null;
 
             try
             {
-                ptr = Marshal.SecureStringToBSTR(secString);
+                byte* bstrBytes = (byte*)Marshal.SecureStringToBSTR(secString);
+                workArray = new byte[length * 2];
+                handle = GCHandle.Alloc(workArray, GCHandleType.Pinned); // Hats off to Tobias Bauer
 
-                byte* bytePtr = (byte*)ptr.ToPointer();
-
-                int i = 0;
-
-                for (; *bytePtr != 0; bytePtr++, i++)
-                {
-                    bytes[i] = *bytePtr;
-                }
+                for (int i = 0; i < workArray.Length; i++)                                    
+                        workArray[i] = *bstrBytes++;               
             }
             catch (Exception e)
             {
-
-                throw;
+                
             }
             finally
-            {
-                Marshal.FreeBSTR(ptr);
+            {                               
+                handle?.Free();
+
+                if (ptr != IntPtr.Zero)
+                    Marshal.ZeroFreeBSTR(ptr);
             }
 
-            return bytes;
+            return workArray;
         }
        
         public static bool Equals(this SecureString SecureString1, SecureString SecureString2)
