@@ -25,6 +25,19 @@ namespace CustomControlsLibrary
     {
         #region Dependency Properties
 
+        #region Id
+
+        public int Id
+        {
+            get { return (int)GetValue(IdProperty); }
+            set { SetValue(IdProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Id.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IdProperty;
+
+        #endregion
+
         #region Styles
 
         public Style PasswordBoxStyle
@@ -78,9 +91,9 @@ namespace CustomControlsLibrary
 
 
 
-        public Func<SecureString, TextBlock, bool> CheckPasswordDelegate
+        public Func<int, SecureString, TextBlock, bool> CheckPasswordDelegate
         {
-            get { return (Func<SecureString, TextBlock, bool>)GetValue(CheckPasswordDelegateProperty); }
+            get { return (Func<int, SecureString, TextBlock, bool>)GetValue(CheckPasswordDelegateProperty); }
             set { SetValue(CheckPasswordDelegateProperty, value); }
         }
 
@@ -129,6 +142,14 @@ namespace CustomControlsLibrary
         {
             #region Register Dependency Properties
 
+            #region Id
+
+            IdProperty =
+            DependencyProperty.Register("Id", typeof(int), 
+            typeof(CustomPasswordBox), new PropertyMetadata(0, OnIdPropertyChanged));
+
+            #endregion
+
             #region Styles
 
             BorderStyleProperty =
@@ -164,7 +185,7 @@ namespace CustomControlsLibrary
             typeof(CustomPasswordBox), new PropertyMetadata(false));
 
             CheckPasswordDelegateProperty =
-            DependencyProperty.Register("CheckPasswordDelegate", typeof(Func<SecureString, TextBlock, bool>), 
+            DependencyProperty.Register("CheckPasswordDelegate", typeof(Func<int, SecureString, TextBlock, bool>), 
             typeof(CustomPasswordBox), new PropertyMetadata(null, OnCheckPasswordDelegatePropertyChanged));
 
             #endregion
@@ -188,6 +209,17 @@ namespace CustomControlsLibrary
         #region Methods
 
         #region Property Changes
+
+        #region Id
+
+        private static void OnIdPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var This = d as CustomPasswordBox;
+
+            This.Id = (int)e.NewValue;
+        }
+
+        #endregion
 
         #region Styles
 
@@ -232,7 +264,7 @@ namespace CustomControlsLibrary
         {
             var This = d as CustomPasswordBox;
 
-            This.CheckPasswordDelegate = (Func<SecureString, TextBlock, bool>)e.NewValue;
+            This.CheckPasswordDelegate = (Func<int, SecureString, TextBlock, bool>)e.NewValue;
         }
 
         private static void OnErrorTextBlockHeightPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -260,7 +292,7 @@ namespace CustomControlsLibrary
 
         private void Check()
         {
-            IsCorrect = CheckPasswordDelegate?.Invoke(this.Password.SecurePassword, Error) ?? false;
+            IsCorrect = CheckPasswordDelegate?.Invoke(this.Id, this.Password.SecurePassword, Error) ?? false;
 
             if (IsCorrect)
             {

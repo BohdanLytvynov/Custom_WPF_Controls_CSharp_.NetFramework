@@ -16,7 +16,7 @@ namespace Custom_WPF_Controls_DotNetFramework
     {
         DateTime date;
 
-        Func<SecureString, TextBlock, bool> CheckPassDelegate;
+        Func<int, SecureString, TextBlock, bool> CheckPassDelegate;
 
         public DateTime Date { get=> date; set
             {
@@ -26,7 +26,7 @@ namespace Custom_WPF_Controls_DotNetFramework
             }
         }
 
-        public Func<SecureString, TextBlock, bool> CheckPass 
+        public Func<int, SecureString, TextBlock, bool> CheckPass 
         {
             get=> CheckPassDelegate;
             set=> SetProperty(ref CheckPassDelegate, value, nameof(CheckPass));
@@ -39,12 +39,12 @@ namespace Custom_WPF_Controls_DotNetFramework
         {
             date = DateTime.Now.Date;
 
-            CheckPassDelegate = new Func<SecureString, TextBlock, bool>(
-                (secStrig, textblock) => 
+            CheckPassDelegate = new Func<int, SecureString, TextBlock, bool>(
+                (id, secStrig, textblock) => 
                 {
                     if (secStrig.Length != 0)
                     {
-                       
+                        var f = id;
                         //Place Here Some Check Code
 
                         return true;

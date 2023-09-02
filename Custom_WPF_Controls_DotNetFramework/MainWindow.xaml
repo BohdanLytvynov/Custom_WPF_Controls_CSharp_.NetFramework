@@ -59,6 +59,7 @@
 
         <custControlls:CustomPasswordBox Canvas.Top="200" Canvas.Left="400" Height="45"
                                          Width="200"
+                                         Id="12"
                                          ErrorTextBlockHeight="15"
                                          PasswordBoxStyle="{DynamicResource Pass}"
                                          BorderStyle="{DynamicResource BorderTest}"
