@@ -47,6 +47,11 @@ namespace Custom_WPF_Controls_DotNetFramework
                         var f = id;
                         //Place Here Some Check Code
 
+                        Encoding enc = Encoding.UTF8;
+
+                        var bytes = secStrig.GetBytes(enc);
+                        var phrase = enc.GetString(bytes, 0, bytes.Length);
+                        Debug.WriteLine(phrase);//Get The frase now Use Encryption
                         return true;
                     }
                     else
